@@ -18,6 +18,7 @@ class Sector(BaseModel):
 
 class SectorInDB(Sector):
     id: uuid.UUID
+    color: int
 
 class Field(BaseModel):
     name: str

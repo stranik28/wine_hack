@@ -25,6 +25,7 @@ class Field(Base):
     sectors = Column(ARRAY(UUID(as_uuid=True)))
     year = Column(Integer)
     name = Column(String)
+    
 
 class Bushe(Base):
     __tablename__ = "Bushe"
