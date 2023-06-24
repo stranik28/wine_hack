@@ -49,7 +49,14 @@ class GrapeRepository():
     async def get_sector(session: AsyncSession, sector_id: uuid.UUID) -> SectorInDB:
         try:
             sector = await session.get(SectorModel, sector_id)
-            return SectorInDB(**sector.dict())
+            coordinates_string = sector.coordinates
+            coordinates_string = coordinates_string.strip('[]')
+            # Разделяем строку на отдельные координаты
+            coordinates_list = coordinates_string.split('],[')
+            # Преобразуем каждую координату в массив чисел
+            coord = [list(map(float, coord.split(','))) for coord in coordinates_list]
+            sector.coordinates = coord
+            return SectorInDB(**sector.__dict__)
         except Exception as e:
             raise e
         
@@ -57,8 +64,17 @@ class GrapeRepository():
         try:
             sectors = await session.execute(select(SectorModel))
             res = sectors.scalars().all()
-            res = [SectorInDB(**r.__dict__) for r in res]
-            return res
+            answ = []
+            for i in res:
+                coordinates_string = i.coordinates
+                coordinates_string = coordinates_string.strip('[]')
+                # Разделяем строку на отдельные координаты
+                coordinates_list = coordinates_string.split('],[')
+                # Преобразуем каждую координату в массив чисел
+                coord = [list(map(float, coord.split(','))) for coord in coordinates_list]
+                i.coordinates = coord
+                answ.append(SectorInDB(**i.__dict__))
+            return answ
         except Exception as e:
             raise e
         

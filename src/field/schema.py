@@ -22,6 +22,7 @@ class Sector(BaseModel):
 
 class SectorInDB(Sector):
     id: uuid.UUID
+    coordinates: List[List[float]]
 
 class Field(BaseModel):
     name: str
