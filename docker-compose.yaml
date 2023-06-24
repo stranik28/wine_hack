@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+    db:
+      image: postgres
+      restart: always
+      env_file:
+        - .env
+    serv:
+      build: .
+      restart: always
+      env_file:
+        - .env
+      ports:
+        - "9999:8000"
+      depends_on:
+        - db
+      volumes:
+        - .:/app
