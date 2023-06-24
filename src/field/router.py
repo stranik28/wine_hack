@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_async_session
 from typing import List
 import uuid
-from .schema import Grape, GrapeInDB, Sector, SectorInDB, Field, FieldInDB
+from .schema import Grape, Sector, SectorInDB, Field, FieldInDB
 from .repository import GrapeRepository
 
 
@@ -21,7 +21,7 @@ async def create_grape(grape: Grape, session: AsyncSession = Depends(get_async_s
 async def get_grape(grape_id: uuid.UUID, session: AsyncSession = Depends(get_async_session)):
     try:
         grape = await GrapeRepository.get_grape(session, grape_id)
-        return GrapeInDB(**grape.dict())
+        return grape
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     

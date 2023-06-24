@@ -18,10 +18,12 @@ class GrapeRepository():
         except Exception as e:
             raise e
         
-    async def get_grape(session: AsyncSession, grape_id: uuid.UUID) -> GrapeInDB:
+    async def get_grape(session: AsyncSession, grape_id: uuid.UUID):
         try:
-            grape = await session.get(GrapeModel, grape_id)
-            return GrapeInDB(**grape.dict())
+            grape = select(GrapeModel).where(GrapeModel.id == grape_id)
+            grape = await session.execute(grape)
+            grape = grape.scalars().first()
+            return grape.__dict__
         except Exception as e:
             raise e
         
