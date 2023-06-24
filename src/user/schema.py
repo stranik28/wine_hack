@@ -10,6 +10,7 @@ class UserCreate(BaseModel):
     name: str
     surname: str
     role: int
+    age: int
 
 class User(UserCreate):
     id: uuid.UUID
@@ -29,6 +30,7 @@ class ResponseUser(BaseModel):
 class ResponseUserDev(ResponseUser):
     id: uuid.UUID
     name: str
+    age: int
     surname: str
     role: str
 

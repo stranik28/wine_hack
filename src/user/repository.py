@@ -12,6 +12,8 @@ class UserRepository():
             stmt = select(User, RoleDB).join(RoleDB)
             result = await session.execute(stmt)
             respones =  result.scalars().all()
+            for i in respones:
+                print(i.__dict__)
             respones = [ResponseUserDev(**res.__dict__) for res in respones]
             for i in respones:
                 stmt = select(RoleDB).where(RoleDB.id == int(i.role))
@@ -19,6 +21,7 @@ class UserRepository():
                 role = result.scalars().first()
                 i.role = None
                 i.role = role.name
+            print(respones)
             return [ResponseUserDev(**res.__dict__) for res in respones]
 
             
@@ -36,6 +39,7 @@ class UserRepository():
             user_db.name = user.name
             user_db.surname = user.surname
             user_db.role = user.role
+            user_db.age = user.age
             session.add(user_db)
             await session.commit()
 
