@@ -1,26 +1,26 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from src.user.model import User, Role as RoleDB
-from src.user.schema import ResponseUser, Role 
+from src.user.schema import ResponseUser, Role, ResponseUserDev
 from typing import List
 
 
 class UserRepository():
 
-    async def get_all(session: AsyncSession, body) -> List[ResponseUser]:
+    async def get_all(session: AsyncSession) -> List[ResponseUserDev]:
         async with session.begin():
-            # Make request with filter from body if it is not None
-            stmt = select(User)
-            if body not in [None, {}]:
-                if body.name is not None:
-                    stmt = stmt.where(User.name == body.name)
-                if body.surname is not None:
-                    stmt = stmt.where(User.surname == body.surname)
-                if body.role is not None:
-                    stmt = stmt.where(User.role == body.role)
+            stmt = select(User, RoleDB).join(RoleDB)
             result = await session.execute(stmt)
             respones =  result.scalars().all()
-            return [ResponseUser(**res.__dict__) for res in respones]
+            respones = [ResponseUserDev(**res.__dict__) for res in respones]
+            for i in respones:
+                stmt = select(RoleDB).where(RoleDB.id == int(i.role))
+                result = await session.execute(stmt)
+                role = result.scalars().first()
+                i.role = None
+                i.role = role.name
+            return [ResponseUserDev(**res.__dict__) for res in respones]
+
             
 
     async def get(session: AsyncSession, user_id: int) -> ResponseUser:

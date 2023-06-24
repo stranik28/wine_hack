@@ -3,18 +3,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_async_session
 from src.user.repository import UserRepository
 from typing import List
-from src.user.schema import ResponseUser, User_filter, UserCreate, RoleCreate, Role
+from src.user.schema import ResponseUserDev, User_filter, UserCreate, RoleCreate, Role
 import uuid
 
 router = APIRouter(prefix="/user", tags=["user"])
 
-@router.get("/", response_model=List[ResponseUser])
+@router.get("/", response_model=List[ResponseUserDev])
 async def get_users(session: AsyncSession = Depends(get_async_session)):
     '''
         Поля фильтрации опциональоные, если не указаны, то фильтрация не производится
     '''
     try:
-        users = await UserRepository.get_all(session, body = None)
+        users = await UserRepository.get_all(session)
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

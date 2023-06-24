@@ -26,3 +26,9 @@ class ResponseUser(BaseModel):
     name: str
     surname: str
 
+class ResponseUserDev(ResponseUser):
+    id: uuid.UUID
+    name: str
+    surname: str
+    role: str
+
