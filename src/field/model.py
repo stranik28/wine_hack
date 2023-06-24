@@ -10,6 +10,10 @@ class Sector(Base):
     name = Column(String)
     weight = Column(Integer)
     year = Column(Integer)
+    grade = Column(Integer)
+    air = Column(Integer)
+    ground = Column(Integer)
+    water = Column(Integer)
     grape = Column(UUID(as_uuid=True), ForeignKey('Grape.id'))
 
 class Grape(Base):

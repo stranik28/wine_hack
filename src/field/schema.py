@@ -15,10 +15,13 @@ class Sector(BaseModel):
     weight: int
     year: int
     grape: uuid.UUID
+    grade: int = None
+    air: int = None
+    ground: int = None
+    water: int = None
 
 class SectorInDB(Sector):
     id: uuid.UUID
-    color: int
 
 class Field(BaseModel):
     name: str

@@ -36,6 +36,10 @@ class GrapeRepository():
 
     async def create_sector(session: AsyncSession, sector: Sector):
         try:
+            sector.water = random.randint(0, 10)
+            sector.ground = random.randint(0, 10)
+            sector.air = random.randint(0, 10)
+            sector.grade = random.randint(0, 10)
             sector = SectorModel(**sector.dict())
             session.add(sector)
             await session.commit()
@@ -45,7 +49,7 @@ class GrapeRepository():
     async def get_sector(session: AsyncSession, sector_id: uuid.UUID) -> SectorInDB:
         try:
             sector = await session.get(SectorModel, sector_id)
-            return SectorInDB(**sector.dict(), color=random.randint(0, 10))
+            return SectorInDB(**sector.dict())
         except Exception as e:
             raise e
         
@@ -53,7 +57,7 @@ class GrapeRepository():
         try:
             sectors = await session.execute(select(SectorModel))
             res = sectors.scalars().all()
-            res = [SectorInDB(**r.__dict__, color = random.randint(0, 10)) for r in res]
+            res = [SectorInDB(**r.__dict__) for r in res]
             return res
         except Exception as e:
             raise e

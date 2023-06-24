@@ -1,11 +1,13 @@
 version: '3.1'
 
 services:
+
     db:
       image: postgres
       restart: always
       env_file:
         - .env
+
     serv:
       build: .
       restart: always
