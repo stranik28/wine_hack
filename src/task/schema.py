@@ -23,3 +23,11 @@ class TaskTypeInDB(TaskType):
 
 class TaskStatusInDB(TaskStatus):
     id: UUID
+
+class ResponesTask(BaseModel):
+    id: UUID
+    sector: UUID
+    user: UUID
+    task_type: str
+    status: UUID
+    description: str

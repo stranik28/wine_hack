@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schema import Task, TaskType, TaskStatus, TaskInDB, TaskTypeInDB, TaskStatusInDB
+from .schema import Task, TaskType, TaskStatus, TaskInDB, TaskTypeInDB, TaskStatusInDB, ResponesTask
 from .model import Task as TaskModel
 from .model import TaskType as TaskTypeModel
 from .model import TaskStatus as TaskStatusModel
@@ -52,8 +52,12 @@ class TaskRepository:
         res = [TaskStatusInDB(**r.__dict__) for r in res]
         return res
     
-    async def get_user_tasks(session: AsyncSession, user_id: uuid.UUID) -> List[TaskInDB]:
+    async def get_user_tasks(session: AsyncSession, user_id: uuid.UUID) -> List[ResponesTask]:
         tasks = await session.execute(select(TaskModel).where(TaskModel.user == user_id))
         res = tasks.scalars().all()
-        res = [TaskInDB(**r.__dict__) for r in res]
+        # Get instead of task types select from task_types table (name)
+        for i in res:
+            task_type = await session.get(TaskTypeModel, i.task_type)
+            i.task_type = task_type.name
+        res = [ResponesTask(**r.__dict__) for r in res]
         return res
