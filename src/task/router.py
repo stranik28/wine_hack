@@ -53,6 +53,15 @@ async def get_tasks(session: AsyncSession = Depends(get_async_session)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
+@router.get("tasks/users/{user_id}")
+async def get_user_tasks(user_id: uuid.UUID, session: AsyncSession = Depends(get_async_session)):
+    try:
+        print("Pop")
+        tasks = await TaskRepository.get_user_tasks(session, user_id)
+        return tasks
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.get("/{task_id}")
 async def get_task(task_id: uuid.UUID, session: AsyncSession = Depends(get_async_session)):
     try:
@@ -60,3 +69,4 @@ async def get_task(task_id: uuid.UUID, session: AsyncSession = Depends(get_async
         return task
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    

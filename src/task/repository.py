@@ -51,3 +51,9 @@ class TaskRepository:
         res = task_statuses.scalars().all()
         res = [TaskStatusInDB(**r.__dict__) for r in res]
         return res
+    
+    async def get_user_tasks(session: AsyncSession, user_id: uuid.UUID) -> List[TaskInDB]:
+        tasks = await session.execute(select(TaskModel).where(TaskModel.user == user_id))
+        res = tasks.scalars().all()
+        res = [TaskInDB(**r.__dict__) for r in res]
+        return res

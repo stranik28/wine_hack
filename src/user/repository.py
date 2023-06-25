@@ -1,9 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from src.user.model import User, Role as RoleDB
-from src.user.schema import ResponseUser, Role, ResponseUserDev
+from src.user.schema import Role, ResponseUserDev
 from typing import List
-
 
 class UserRepository():
 
