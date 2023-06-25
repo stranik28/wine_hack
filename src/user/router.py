@@ -44,7 +44,7 @@ async def get_roles(session: AsyncSession = Depends(get_async_session)):
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.get("/{user_id}")
-async def get_user(user_id: uuid.UUID, session: AsyncSession = Depends(get_async_session)):
+async def get_user(user_id: uuid.UUID, session: AsyncSession = Depends(get_async_session)) -> ResponseUserDev:
     try:
         user = await UserRepository.get(session, user_id)
         return user

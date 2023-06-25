@@ -21,17 +21,22 @@ class UserRepository():
                 role = result.scalars().first()
                 i.role = None
                 i.role = role.name
-            print(respones)
             return [ResponseUserDev(**res.__dict__) for res in respones]
 
             
 
-    async def get(session: AsyncSession, user_id: int) -> ResponseUser:
+    async def get(session: AsyncSession, user_id) -> ResponseUserDev:
         async with session.begin():
             stmt = select(User).where(User.id == user_id)
             result = await session.execute(stmt)
             respones =  result.scalars().first()
-            return ResponseUser(**respones.__dict__)
+            respones = ResponseUserDev(**respones.__dict__)
+            stmt = select(RoleDB).where(RoleDB.id == int(respones.role))
+            result = await session.execute(stmt)
+            role = result.scalars().first()
+            respones.role = None
+            respones.role = role.name
+            return ResponseUserDev(**respones.__dict__)
         
     async def create(session: AsyncSession, user):
         async with session.begin():
